@@ -1,0 +1,9 @@
+.users-container {
+  padding: 0 60px;
+}
+
+.users-title {
+  font-size: 36px;
+  font-weight: 400;
+  padding: 30px 0;
+}

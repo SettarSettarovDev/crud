@@ -1,0 +1,26 @@
+.user-page-header-container {
+  text-align: center;
+  margin-top: 60px;
+}
+
+.user-page-header-container p {
+  margin-top: 15px;
+}
+
+.user-name,
+.user-email {
+  font-size: 32px;
+}
+
+.user-role {
+  font-size: 24px;
+  text-transform: lowercase;
+  margin-bottom: 25px;
+}
+
+.user-icon {
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  margin: 0 15px;
+}

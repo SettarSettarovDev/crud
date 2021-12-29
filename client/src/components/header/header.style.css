@@ -1,0 +1,53 @@
+.header {
+  padding: 0 60px;
+  height: 80px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  color: #4e4b66;
+  background-color: #f7f7fc;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.logo {
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.logo-item {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.logo-avatar {
+  width: 48px;
+  height: 48px;
+  margin-right: 15px;
+}
+
+.logo-username {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.options {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.options .options-link {
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+.options-icon {
+  margin-left: 15px;
+}
