@@ -1,27 +1,27 @@
-.user-form-container {
-  width: 300px;
+.profile-form-container {
+  width: 250px;
 }
 
-.user-form__group {
+.profile-form__group {
   display: flex;
   flex-direction: column;
   margin-bottom: 25px;
 }
 
-.user-form__radio-group {
+.profile-form__radio-group {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 }
 
-.user-form__label {
+.profile-form__label {
   color: #6e7191;
   font-size: 18px;
   letter-spacing: 0.75px;
   line-height: 2;
 }
 
-.user-form__input {
+.profile-form__input {
   color: #14142b;
   font-size: 24px;
   letter-spacing: 0.75px;
@@ -31,21 +31,21 @@
   border-bottom: 1px solid;
 }
 
-.user-form__input--role {
+.profile-form__input--gender {
   border-bottom: none;
 }
 
-.user-form__input-radio {
+.profile-form__input-radio {
   margin-right: 10px;
 }
 
-.user-form__btn-group {
+.profile-form__btn-group {
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
   margin-top: 50px;
 }
 
-.user-form__button {
+.profile-form__button {
   height: 40px;
   width: 100px;
   border: none;
@@ -56,6 +56,6 @@
   transition: all 0.5s;
 }
 
-.user-form__button:hover {
+.profile-form__button:hover {
   background-color: #d7d8dd;
 }

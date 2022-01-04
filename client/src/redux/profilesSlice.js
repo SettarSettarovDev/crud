@@ -22,10 +22,22 @@ const profilesSlice = createSlice({
       );
       state.splice(profileForDeleting, 1);
     },
+    deleteProfiles(state, action) {
+      return state.filter(profile => profile.profileForUser !== action.payload);
+    },
+    clearProfiles(state, action) {
+      return [];
+    },
   },
 });
 
-export const { addProfile, fetchAllProfiles, deleteProfile, editProfile } =
-  profilesSlice.actions;
+export const {
+  addProfile,
+  fetchAllProfiles,
+  deleteProfile,
+  editProfile,
+  deleteProfiles,
+  clearProfiles,
+} = profilesSlice.actions;
 
 export default profilesSlice.reducer;

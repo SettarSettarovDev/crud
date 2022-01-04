@@ -15,23 +15,12 @@ const Profile = sequalize.define('profilesdb', {
   profileGender: { type: DataTypes.STRING, allowNull: false },
   profileBirthday: { type: DataTypes.STRING, allowNull: false },
   profileCity: { type: DataTypes.STRING, allowNull: false },
-  // UserId: {
-  //   type: DataTypes.INTEGER,
-  //   allowNull: false,
-  //   // references: { model: User, key: userId },
-  // },
+
   profileForUser: { type: DataTypes.INTEGER, allowNull: false },
 });
 
-User.hasMany(
-  Profile
-  // {
-  //   // foreignKey: 'UserId',
-  // }
-);
+User.hasMany(Profile);
 Profile.belongsTo(User);
-// User.hasMany(Profile, { foreignKey: 'userId', sourceKey: 'profileId' });
-// Profile.belongsTo(User, { foreignKey: 'userId', targetKey: 'profileId' });
 
 module.exports = {
   User,

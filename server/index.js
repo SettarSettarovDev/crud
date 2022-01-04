@@ -19,8 +19,6 @@ app.get('/', (req, res) => {
   res.status(200).json({ message: 'WORKING' });
 });
 
-console.log(Profiles);
-
 const start = async () => {
   try {
     await sequelize.authenticate();

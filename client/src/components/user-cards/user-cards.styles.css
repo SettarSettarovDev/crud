@@ -7,12 +7,11 @@
 
 .user-card-container {
   display: flex;
-  /* flex-wrap: wrap; */
   flex-direction: column;
   justify-content: space-around;
   height: 200px;
   width: 400px;
-  /* margin: 20px; */
+  cursor: pointer;
   padding: 20px;
   background-color: #fff;
   border: 1px solid #d6d8e7;

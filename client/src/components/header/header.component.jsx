@@ -1,25 +1,34 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import './header.style.css';
 import { useSelector, useDispatch } from 'react-redux';
-import { setCurrentUser, setIsAuth } from '../../redux/authSlice.js';
+import {
+  setCurrentUser,
+  setIsAdmin,
+  setIsAuth,
+} from '../../redux/authSlice.js';
 import { ReactComponent as ProfilesIcon } from '../../assets/profiles.svg';
 import { ReactComponent as DashboardIcon } from '../../assets/dashboard.svg';
 import { ReactComponent as UsersIcon } from '../../assets/users.svg';
 import { ReactComponent as AvatarAdmin } from '../../assets/avatar-admin.svg';
 import { ReactComponent as AvatarUser } from '../../assets/avatar-user.svg';
+import { clearUsers } from '../../redux/usersSlice';
+import { clearProfiles } from '../../redux/profilesSlice';
 
 const Header = () => {
-  // const [isAdmin, setIsAdmin] = useState(true);
-  // Values above should become from the state
-  // Values above should become from the state
-  const { isAdmin } = useSelector(state => state.auth);
+  const {
+    isAdmin,
+    currentUser: { userName },
+  } = useSelector(state => state.auth);
 
   const dispatch = useDispatch();
 
   const logoutHandler = () => {
     dispatch(setCurrentUser({}));
     dispatch(setIsAuth(false));
+    dispatch(setIsAdmin(false));
+    dispatch(clearUsers());
+    dispatch(clearProfiles());
     localStorage.removeItem('token');
   };
 
@@ -32,7 +41,7 @@ const Header = () => {
           ) : (
             <AvatarUser className="logo-avatar" />
           )}
-          <p className="logo-username">Username</p>
+          <p className="logo-username">{userName}</p>
         </Link>
       </div>
       <div className="options">

@@ -20,15 +20,29 @@
   margin: 60px 0 0 0;
 }
 
+.buttons-container {
+  display: flex;
+}
+
 .btn-in-profile {
-  /* align-self: flex-end; */
+  display: flex;
+  justify-content: center;
+  justify-items: center;
   width: 50%;
   font-size: 18px;
   padding: 7px 10px;
+  cursor: pointer;
   border: none;
   background-color: #fff;
   border-top: 1px solid #d6d8e7;
   transition: all 0.5s;
+}
+
+.btn-in-profile div {
+  display: inline-block;
+}
+.btn-in-profile svg {
+  margin-left: 10px;
 }
 
 .btn-in-profile:last-child {
@@ -39,10 +53,15 @@
   background-color: #624af2;
   color: #fff;
 }
+
 .btn-in-profile--delete:hover {
   background-color: #eb0055;
   color: #fff;
 }
+
+/* .btn-in-profile--edit:hover svg {
+  fill: #fff;
+} */
 
 .card-item .buttons-container {
   opacity: 0;

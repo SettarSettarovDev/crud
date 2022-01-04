@@ -9,16 +9,18 @@ import { Fragment, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import UserPage from './pages/user-page/user-page.component';
 import PageNotFound from './pages/page-not-found/page-not-found.component';
-import { check } from './http/userApi';
+import { check, roles } from './http/authApi';
 import { setCurrentUser, setIsAdmin, setIsAuth } from './redux/authSlice';
 import Spinner from './components/spinner/spinner.component';
 import ProfilesPage from './pages/profiles-page/profiles-page.component';
-import axios from 'axios';
 import { fetchAllUsers } from './redux/usersSlice';
+import { fetchAllProfiles } from './redux/profilesSlice';
+import { getAllUsers } from './http/usersApi';
+import { getAllProfiles } from './http/profilesApi';
 
 function App() {
   const [loading, setLoading] = useState(true);
-  const { isAuth, isAdmin, currentUser } = useSelector(state => state.auth);
+  const { isAuth, isAdmin } = useSelector(state => state.auth);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -27,7 +29,7 @@ function App() {
         const { userRole: role } = currentUser;
         dispatch(setCurrentUser({ ...currentUser }));
         dispatch(setIsAuth(true));
-        dispatch(setIsAdmin(role === 'ADMIN' ? true : false));
+        dispatch(setIsAdmin(role === roles.admin ? true : false));
       })
       .finally(() => setLoading(false));
   }, [dispatch]);
@@ -36,16 +38,19 @@ function App() {
 
   useEffect(() => {
     if (token) {
-      axios
-        .get(`http://localhost:5000/api/users`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        .then(res => {
-          dispatch(fetchAllUsers(res.data));
-          console.log(res.data);
-        });
+      (async () => {
+        const data = await getAllUsers();
+        dispatch(fetchAllUsers(data));
+      })();
+    }
+  }, [dispatch, token]);
+
+  useEffect(() => {
+    if (token) {
+      (async () => {
+        const data = await getAllProfiles();
+        dispatch(fetchAllProfiles(data));
+      })();
     }
   }, [dispatch, token]);
 

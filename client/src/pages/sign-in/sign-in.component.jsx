@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { login } from '../../http/userApi';
+import { login, roles } from '../../http/authApi';
 import './sign-in.styles.css';
 import {
   setCurrentUser,
@@ -15,8 +15,6 @@ const SignIn = () => {
     password: '',
   });
 
-  // const users = useSelector(state => state.users.value);
-
   const dispatch = useDispatch();
 
   const { email, password } = userCredentials;
@@ -27,10 +25,9 @@ const SignIn = () => {
     try {
       const currentUser = await login(email, password);
       const { userRole: role } = currentUser;
-      console.log(currentUser);
       dispatch(setCurrentUser({ ...currentUser }));
       dispatch(setIsAuth(true));
-      dispatch(setIsAdmin(role === 'ADMIN' ? true : false));
+      dispatch(setIsAdmin(role === roles.admin ? true : false));
     } catch (e) {
       alert(e.response.data.message);
     }
@@ -44,34 +41,42 @@ const SignIn = () => {
 
   return (
     <div className="sign-in-container">
-      <h2>Sign in</h2>
-      <form className="sign-in-form" onSubmit={handleSubmit}>
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            name="email"
-            value={email}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <label>Password</label>
-          <input
-            type="password"
-            name="password"
-            value={password}
-            onChange={handleChange}
-            required
-          />
-        </div>
+      <h2 className="sign-in__title">Sign in</h2>
+      <div className="sign-in">
+        <form className="sign-in-form" onSubmit={handleSubmit}>
+          <div className="sign-in-form__group">
+            <label className="sign-in-form__label">Email</label>
+            <input
+              className="sign-in-form__input"
+              type="email"
+              name="email"
+              value={email}
+              onChange={handleChange}
+              required
+            />
+          </div>
+          <div className="sign-in-form__group">
+            <label className="sign-in-form__label">Password</label>
+            <input
+              className="sign-in-form__input"
+              type="password"
+              name="password"
+              value={password}
+              onChange={handleChange}
+              required
+            />
+          </div>
 
-        <div>
-          <button type="submit">Sign in</button>
-        </div>
-      </form>
-      <Link to={'/sign-up'}>I don't have an account</Link>
+          <div>
+            <button className="sign-in-form__button" type="submit">
+              Sign in
+            </button>
+          </div>
+        </form>
+        <Link className="sign-in-link" to={'/sign-up'}>
+          I don't have an account
+        </Link>
+      </div>
     </div>
   );
 };

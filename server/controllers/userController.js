@@ -3,61 +3,101 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { User, Profile } = require('../models/models');
 
-const genereateJwt = (userId, userEmail, userRole) => {
-  return jwt.sign({ userId, userEmail, userRole }, process.env.SECRET_KEY, {
-    expiresIn: '24h',
-  });
+const genereateJwt = (userId, userEmail, userRole, userName) => {
+  return jwt.sign(
+    { userId, userEmail, userRole, userName },
+    process.env.SECRET_KEY,
+    {
+      expiresIn: '24h',
+    }
+  );
 };
 
 const UserController = {
   async registration(req, res, next) {
-    const { userName, userEmail, userPassword, userRole } = req.body;
-    if (!userName || !userEmail || !userPassword) {
-      return next(ApiError.badRequest('Incorrect name, email or passsword'));
+    try {
+      const { userName, userEmail, userPassword, userRole } = req.body;
+      if (!userName || !userEmail || !userPassword) {
+        return next(ApiError.badRequest('Incorrect name, email or passsword'));
+      }
+      const candidate = await User.findOne({ where: { userEmail } });
+      if (candidate) {
+        return next(ApiError.badRequest('User with this email alredy exist'));
+      }
+      const hashPassword = await bcrypt.hash(userPassword, 5);
+      const user = await User.create({
+        userName,
+        userEmail,
+        userPassword: hashPassword,
+        userRole,
+      });
+      const token = genereateJwt(
+        user.userId,
+        user.userEmail,
+        user.userRole,
+        user.userName
+      );
+      return res.json(token);
+    } catch (e) {
+      next(ApiError.badRequest(e.message));
     }
-    const candidate = await User.findOne({ where: { userEmail } });
-    if (candidate) {
-      return next(ApiError.badRequest('User with this email alredy exist'));
-    }
-    const hashPassword = await bcrypt.hash(userPassword, 5);
-    const user = await User.create({
-      userName,
-      userEmail,
-      userPassword: hashPassword,
-      userRole,
-    });
-    const token = genereateJwt(user.userId, user.userEmail, user.userRole);
-    return res.json(token);
   },
+
   async login(req, res, next) {
-    const { userEmail, userPassword } = req.body;
-    const user = await User.findOne({ where: { userEmail } });
-    if (!user) {
-      return next(ApiError.internal('User not found'));
+    try {
+      const { userEmail, userPassword } = req.body;
+      const user = await User.findOne({ where: { userEmail } });
+      if (!user) {
+        return next(ApiError.internal('User not found'));
+      }
+      const comparePassword = bcrypt.compareSync(
+        userPassword,
+        user.userPassword
+      );
+      if (!comparePassword) {
+        return next(ApiError.internal('Incorrect password'));
+      }
+      const token = genereateJwt(
+        user.userId,
+        user.userEmail,
+        user.userRole,
+        user.userName
+      );
+      return res.json(token);
+    } catch (e) {
+      next(ApiError.badRequest(e.message));
     }
-    const comparePassword = bcrypt.compareSync(userPassword, user.userPassword);
-    if (!comparePassword) {
-      return next(ApiError.internal('Incorrect password'));
-    }
-    const token = genereateJwt(user.userId, user.userEmail, user.userRole);
-    return res.json(token);
   },
+
   async check(req, res, next) {
-    const token = genereateJwt(
-      req.user.userId,
-      req.user.userEmail,
-      req.user.userRole
-    );
-    return res.json(token);
+    try {
+      const token = genereateJwt(
+        req.user.userId,
+        req.user.userEmail,
+        req.user.userRole,
+        req.user.userName
+      );
+      return res.json(token);
+    } catch (e) {
+      next(ApiError.badRequest(e.message));
+    }
   },
   async getAllUsers(req, res) {
-    const users = await User.findAll();
-    return res.json(users);
+    try {
+      const users = await User.findAll();
+      return res.json(users);
+    } catch (e) {
+      next(ApiError.badRequest(e.message));
+    }
   },
   async getOneUser(req, res) {
-    const { userId } = req.params;
-    const user = await User.findOne({ where: { userId } });
-    return res.json(user);
+    try {
+      const { userId } = req.params;
+      const user = await User.findOne({ where: { userId } });
+      return res.json(user);
+    } catch (e) {
+      next(ApiError.badRequest(e.message));
+    }
   },
   async updateUser(req, res) {
     try {
@@ -78,16 +118,14 @@ const UserController = {
     }
   },
   async deleteUser(req, res) {
-    const { userId } = req.params;
-    const user = await User.destroy({ where: { userId } });
-    return res.json(user);
+    try {
+      const { userId } = req.params;
+      const user = await User.destroy({ where: { userId } });
+      return res.json(user);
+    } catch (e) {
+      next(ApiError.badRequest(e.message));
+    }
   },
 };
-
-// обернуть все в трай кетч,
-// обернуть все в трай кетч,
-// обернуть все в трай кетч,
-// обернуть все в трай кетч,
-// обернуть все в трай кетч,
 
 module.exports = UserController;

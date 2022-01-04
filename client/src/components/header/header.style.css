@@ -48,6 +48,10 @@
   cursor: pointer;
 }
 
+.options .options-link:last-child {
+  margin-left: 50px;
+}
+
 .options-icon {
   margin-left: 15px;
 }

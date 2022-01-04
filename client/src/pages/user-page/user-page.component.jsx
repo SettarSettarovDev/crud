@@ -5,17 +5,17 @@ import Profiles from '../../components/profiles/profiles.component';
 import './user-page.styles.css';
 import { ReactComponent as Edit } from '../../assets/edit.svg';
 import { ReactComponent as Delete } from '../../assets/delete.svg';
-import axios from 'axios';
 import { deleteUser } from '../../redux/usersSlice';
+import { deleteProfiles } from '../../redux/profilesSlice';
 import Popup from '../../components/pop-up/pop-up.component';
 import UserEditForm from '../../components/form-user-edit/form-user-edit.component';
+import { removeUser } from '../../http/usersApi';
+import { removeProfiles } from '../../http/profilesApi';
 
 const UserPage = () => {
   const { userId } = useParams(); // Type String
-  console.log(userId);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
 
   const users = useSelector(state => state.users);
 
@@ -26,19 +26,16 @@ const UserPage = () => {
   };
 
   const targetUser = users.find(user => user.userId === +userId);
-  // const { userId } = targetUser;
-  console.log(targetUser);
-  console.log(userId);
 
-  const onDeleteHandle = userId => {
-    axios
-      .delete(`http://localhost:5000/api/users/${targetUser.userId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then(res => dispatch(deleteUser(targetUser.userId)))
-      .catch(e => console.log(e));
+  const onDeleteHandle = async () => {
+    try {
+      await removeUser(targetUser.userId);
+      dispatch(deleteUser(targetUser.userId));
+      await removeProfiles(targetUser.userId);
+      dispatch(deleteProfiles(targetUser.userId));
+    } catch (e) {
+      console.log(e);
+    }
 
     navigate(`/users`);
   };

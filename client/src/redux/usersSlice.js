@@ -14,7 +14,7 @@ const usersSlice = createSlice({
       const userForEditing = state.findIndex(
         item => item.userId === action.payload.userId
       );
-      state.splice(userForEditing, 1, action.payload);
+      state[userForEditing] = action.payload;
     },
     deleteUser(state, action) {
       const userForDeleting = state.findIndex(
@@ -22,10 +22,13 @@ const usersSlice = createSlice({
       );
       state.splice(userForDeleting, 1);
     },
+    clearUsers(state, action) {
+      return [];
+    },
   },
 });
 
-export const { addUser, deleteUser, editUser, fetchAllUsers } =
+export const { addUser, deleteUser, editUser, fetchAllUsers, clearUsers } =
   usersSlice.actions;
 
 export default usersSlice.reducer;

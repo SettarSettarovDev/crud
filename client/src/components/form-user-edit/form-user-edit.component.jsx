@@ -1,9 +1,13 @@
-import axios from 'axios';
 import React, { useState } from 'react';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { roles } from '../../http/authApi';
+import { changeUser } from '../../http/usersApi';
 import { setCurrentUser, setIsAdmin } from '../../redux/authSlice';
 import { editUser } from '../../redux/usersSlice';
+import { ReactComponent as CheckIcon } from '../../assets/check.svg';
+import { ReactComponent as CloseIcon } from '../../assets/close.svg';
 import './form-user-edit.styles.css';
 
 const UserEditForm = ({ userItem, userId, handleClose }) => {
@@ -13,9 +17,11 @@ const UserEditForm = ({ userItem, userId, handleClose }) => {
     userRole: '',
   });
 
+  const currentUserId = useSelector(state => state.auth.currentUser.userId);
+
   const dispatch = useDispatch();
 
-  const token = localStorage.getItem('token');
+  const navigate = useNavigate();
 
   const { userName, userEmail, userRole } = newUser;
 
@@ -33,93 +39,93 @@ const UserEditForm = ({ userItem, userId, handleClose }) => {
       userEmail,
       userRole,
     });
-  }, []);
+  }, [userItem]);
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
-    axios.put();
+    try {
+      const data = await changeUser(userId, {
+        userName,
+        userEmail,
+        userRole,
+      });
 
-    axios
-      .put(
-        `http://localhost:5000/api/users/${userId}`,
-        {
-          userName,
-          userEmail,
-          userRole,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+      dispatch(editUser(data));
+      if (currentUserId === userId) {
+        dispatch(setCurrentUser(data));
+        dispatch(setIsAdmin(data.userRole === roles.admin ? true : false));
+        if (data.userRole === roles.user) {
+          navigate('/');
         }
-      )
-      .then(res => {
-        console.log(res);
-        dispatch(editUser(res.data));
-        dispatch(setCurrentUser(res.data));
-        dispatch(setIsAdmin(res.data.userrole === 'ADMIN' ? true : false));
-      })
-      .catch(e => console.log(e));
-
-    // Add check for IsAdmin
+      }
+    } catch (e) {
+      console.log(e);
+    }
 
     handleClose();
   };
 
   return (
-    <div className="edit-profile-container">
-      <form className="add-profile-form" onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>user name:</label>
+    <div className="user-form-container">
+      <form className="user-form" onSubmit={handleSubmit}>
+        <div className="user-form__group">
+          <label className="user-form__label">user name:</label>
           <input
+            className="user-form__input"
             type="text"
             name="userName"
-            placeholder="userName"
             value={userName}
             onChange={handleChange}
           />
         </div>
 
-        <div>
-          <label>email:</label>
+        <div className="user-form__group">
+          <label className="user-form__label">email:</label>
           <input
+            className="user-form__input"
             type="text"
             name="userEmail"
             value={userEmail}
-            placeholder="userEmail"
             onChange={handleChange}
           />
         </div>
 
-        <div className="form-group">
-          <p>role:</p>
-          <label>
-            <input
-              type="radio"
-              name="userRole"
-              checked={userRole === 'USER'}
-              value="USER"
-              onChange={handleChange}
-            />
-            user
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="userRole"
-              checked={userRole === 'ADMIN'}
-              value="ADMIN"
-              onChange={handleChange}
-            />
-            admin
-          </label>
+        <div className="user-form__group">
+          <p className="user-form__label">role:</p>
+          <div className="user-form__radio-group">
+            <label className="user-form__input user-form__input--role ">
+              <input
+                className="user-form__input-radio"
+                type="radio"
+                name="userRole"
+                checked={userRole === roles.user}
+                value={roles.user}
+                onChange={handleChange}
+              />
+              user
+            </label>
+            <label className="user-form__input user-form__input--role ">
+              <input
+                className="user-form__input-radio"
+                type="radio"
+                name="userRole"
+                checked={userRole === roles.admin}
+                value={roles.admin}
+                onChange={handleChange}
+              />
+              admin
+            </label>
+          </div>
         </div>
-
-        <button type="submit" onClick={() => console.log(newUser)}>
-          Submit
-        </button>
-        <button onClick={handleClose}>Close</button>
+        <div className="user-form__btn-group">
+          <button className="user-form__button" type="submit">
+            <CheckIcon />
+          </button>
+          <button className="user-form__button" onClick={handleClose}>
+            <CloseIcon />
+          </button>
+        </div>
       </form>
     </div>
   );

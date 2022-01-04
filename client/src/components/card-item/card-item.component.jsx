@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import Popup from '../pop-up/pop-up.component';
-import AddProfile from '../add-profile/add-profile.component';
-// change AddProfile to EditProfile(throw the passing props into generic component AddAndEditProfile)
+import AddAndEditProfile from '../add-and-edit-profile/add-and-edit-profile.component';
 import './card-item.styles.css';
 import { deleteProfile } from '../../redux/profilesSlice.js';
 import { useDispatch } from 'react-redux';
 import { ReactComponent as EditIcon } from '../../assets/edit.svg';
 import { ReactComponent as DeleteIcon } from '../../assets/delete.svg';
+import { removeProfile } from '../../http/profilesApi';
 
 const CardItem = ({ item }) => {
   const dispatch = useDispatch();
@@ -26,21 +25,18 @@ const CardItem = ({ item }) => {
     setIsOpenEditedForm(!isOpenEditedForm);
   };
 
-  const onDeleteHandle = id => {
-    axios
-      .delete(`http://localhost:5000/api/profiles/${profileId}`)
-      .then(res => dispatch(deleteProfile(profileId)))
-      .catch(e => console.log(e));
+  const onDeleteHandle = async () => {
+    try {
+      await removeProfile(profileId);
+      dispatch(deleteProfile(profileId));
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
     <>
-      <div
-        className="card-item"
-        onClick={() => {
-          console.log(profileId);
-        }}
-      >
+      <div className="card-item">
         <p className="card-item__name">{profileName}</p>
         <p>{profileGender}</p>
         <p>{profileBirthday}</p>
@@ -67,7 +63,11 @@ const CardItem = ({ item }) => {
       {isOpenEditedForm && (
         <Popup
           content={
-            <AddProfile handleClose={togglePopup} fromEdit={true} item={item} />
+            <AddAndEditProfile
+              handleClose={togglePopup}
+              fromEdit={true}
+              item={item}
+            />
           }
           handleClose={togglePopup}
         />

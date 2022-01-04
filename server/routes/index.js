@@ -6,7 +6,4 @@ const profileRouter = require('./profiles.Router');
 router.use('/users', userRouter);
 router.use('/profiles', profileRouter);
 
-//  Сделать потом такой путь
-// router.use('/user:id/profiles', profileRouter)
-
 module.exports = router;
