@@ -43,17 +43,28 @@ const UserPage = () => {
   return (
     <React.Fragment>
       <div className="user-page-header-container">
-        <p className="user-name">{targetUser?.userName}</p>
+        <p className="user-name" data-testid="userName">
+          {targetUser?.userName}
+        </p>
         <p className="user-email">{targetUser?.userEmail}</p>
         <p className="user-role">{targetUser?.userRole}</p>
-        <Edit className="user-icon" onClick={togglePopup} />
-        <Delete className="user-icon" onClick={onDeleteHandle} />
+        <Edit
+          data-testid="editUserIcon"
+          className="user-icon"
+          onClick={togglePopup}
+        />
+        <Delete
+          data-testid="deleteUserIcon"
+          className="user-icon"
+          onClick={onDeleteHandle}
+        />
       </div>
       <Profiles userId={+userId} />
       {isOpenEditedForm && (
         <Popup
           content={
             <UserEditForm
+              data-testid="userEditForm"
               handleClose={togglePopup}
               userItem={targetUser}
               userId={targetUser.userId}

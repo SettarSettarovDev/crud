@@ -7,9 +7,6 @@ const usersSlice = createSlice({
     fetchAllUsers(state, action) {
       return action.payload;
     },
-    addUser(state, action) {
-      state.push(action.payload);
-    },
     editUser(state, action) {
       const userForEditing = state.findIndex(
         item => item.userId === action.payload.userId
@@ -28,7 +25,7 @@ const usersSlice = createSlice({
   },
 });
 
-export const { addUser, deleteUser, editUser, fetchAllUsers, clearUsers } =
+export const { deleteUser, editUser, fetchAllUsers, clearUsers } =
   usersSlice.actions;
 
 export default usersSlice.reducer;

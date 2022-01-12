@@ -7,6 +7,8 @@ import { ReactComponent as CheckIcon } from '../../assets/check.svg';
 import { ReactComponent as CloseIcon } from '../../assets/close.svg';
 import './add-and-edit-profile.style.css';
 
+// submitForm props added for testing
+
 const AddAndEditProfile = ({ handleClose, userId, fromEdit, item }) => {
   const [newProfile, setNewProfile] = useState({
     name: '',
@@ -81,8 +83,14 @@ const AddAndEditProfile = ({ handleClose, userId, fromEdit, item }) => {
       <div className="profile-form-container">
         <form className="profile-form" onSubmit={handleSubmit}>
           <div className="profile-form__group">
-            <label className="profile-form__label">name:</label>
+            <label
+              htmlFor="nameProfileEditForm"
+              className="profile-form__label"
+            >
+              name:
+            </label>
             <input
+              id="nameProfileEditForm"
               className="profile-form__input"
               type="text"
               name="name"
@@ -94,8 +102,12 @@ const AddAndEditProfile = ({ handleClose, userId, fromEdit, item }) => {
           <div className="profile-form__group">
             <p className="profile-form__label">gender:</p>
             <div className="profile-form__radio-group">
-              <label className="profile-form__input profile-form__input--gender ">
+              <label
+                htmlFor="genderMaleProfileEditForm"
+                className="profile-form__input profile-form__input--gender "
+              >
                 <input
+                  id="genderMaleProfileEditForm"
                   className="profile-form__input-radio"
                   type="radio"
                   name="gender"
@@ -105,8 +117,12 @@ const AddAndEditProfile = ({ handleClose, userId, fromEdit, item }) => {
                 />
                 male
               </label>
-              <label className="profile-form__input profile-form__input--gender">
+              <label
+                htmlFor="genderFemaleProfileEditForm"
+                className="profile-form__input profile-form__input--gender"
+              >
                 <input
+                  id="genderFemaleProfileEditForm"
                   className="profile-form__input-radio"
                   type="radio"
                   name="gender"
@@ -120,8 +136,14 @@ const AddAndEditProfile = ({ handleClose, userId, fromEdit, item }) => {
           </div>
 
           <div className="profile-form__group">
-            <label className="profile-form__label">birthdate:</label>
+            <label
+              htmlFor="birthdateProfileEditForm"
+              className="profile-form__label"
+            >
+              birthdate:
+            </label>
             <input
+              id="birthdateProfileEditForm"
               className="profile-form__input"
               type="date"
               name="birthDate"
@@ -131,8 +153,14 @@ const AddAndEditProfile = ({ handleClose, userId, fromEdit, item }) => {
           </div>
 
           <div className="profile-form__group">
-            <label className="profile-form__label">city:</label>
+            <label
+              htmlFor="cityProfileEditForm"
+              className="profile-form__label"
+            >
+              city:
+            </label>
             <input
+              id="cityProfileEditForm"
               className="profile-form__input"
               type="text"
               name="city"
@@ -142,7 +170,11 @@ const AddAndEditProfile = ({ handleClose, userId, fromEdit, item }) => {
           </div>
 
           <div className="profile-form__btn-group">
-            <button className="profile-form__button" type="submit">
+            <button
+              className="profile-form__button"
+              type="submit"
+              data-testid="profileAddFormSubmitBtn"
+            >
               <CheckIcon />
             </button>
             <button className="profile-form__button" onClick={handleClose}>

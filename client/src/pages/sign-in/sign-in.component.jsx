@@ -1,21 +1,25 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { login, roles } from '../../http/authApi';
+import validator from 'validator';
 import './sign-in.styles.css';
 import {
   setCurrentUser,
+  setError,
   setIsAdmin,
   setIsAuth,
 } from '../../redux/authSlice.js';
 
 const SignIn = () => {
-  const [userCredentials, setCredentials] = useState({
+  const [userCredentials, setUserCredentials] = useState({
     email: '',
     password: '',
   });
 
   const dispatch = useDispatch();
+
+  const { error } = useSelector(state => state.auth);
 
   const { email, password } = userCredentials;
 
@@ -23,20 +27,29 @@ const SignIn = () => {
     e.preventDefault();
 
     try {
+      if (!validator.isEmail(userCredentials.email)) {
+        return dispatch(setError('The email you input is invalid'));
+      }
+
+      if (!userCredentials.password) {
+        return dispatch(setError('Password is empty'));
+      }
+
       const currentUser = await login(email, password);
       const { userRole: role } = currentUser;
       dispatch(setCurrentUser({ ...currentUser }));
       dispatch(setIsAuth(true));
       dispatch(setIsAdmin(role === roles.admin ? true : false));
+      currentUser && dispatch(setError(null));
     } catch (e) {
-      alert(e.response.data.message);
+      dispatch(setError(e.response.data.message));
     }
   };
 
   const handleChange = e => {
     const { name, value } = e.target;
 
-    setCredentials({ ...userCredentials, [name]: value });
+    setUserCredentials({ ...userCredentials, [name]: value });
   };
 
   return (
@@ -45,8 +58,12 @@ const SignIn = () => {
       <div className="sign-in">
         <form className="sign-in-form" onSubmit={handleSubmit}>
           <div className="sign-in-form__group">
-            <label className="sign-in-form__label">Email</label>
+            <label htmlFor="email" className="sign-in-form__label">
+              Email
+            </label>
             <input
+              data-testid="email"
+              id="email"
               className="sign-in-form__input"
               type="email"
               name="email"
@@ -56,8 +73,12 @@ const SignIn = () => {
             />
           </div>
           <div className="sign-in-form__group">
-            <label className="sign-in-form__label">Password</label>
+            <label htmlFor="password" className="sign-in-form__label">
+              Password
+            </label>
             <input
+              data-testid="password"
+              id="password"
               className="sign-in-form__input"
               type="password"
               name="password"
@@ -67,8 +88,14 @@ const SignIn = () => {
             />
           </div>
 
+          {error && <div className="error-message">{error}</div>}
+
           <div>
-            <button className="sign-in-form__button" type="submit">
+            <button
+              className="sign-in-form__button"
+              type="submit"
+              onClick={handleSubmit}
+            >
               Sign in
             </button>
           </div>

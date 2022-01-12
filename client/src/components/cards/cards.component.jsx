@@ -11,7 +11,11 @@ const Cards = ({ items, togglePopup, userId }) => {
         .map(item => {
           return <CardItem key={item.profileId} item={item} />;
         })}
-      <div className="card-item--add" onClick={togglePopup}>
+      <div
+        data-testid="addNewProfileBtn"
+        className="card-item--add"
+        onClick={togglePopup}
+      >
         <AddIcon className="card-item-icon" />
         <p className="card-item-text">Create new profile</p>
       </div>

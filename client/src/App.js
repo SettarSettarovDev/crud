@@ -24,14 +24,18 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    check()
-      .then(currentUser => {
-        const { userRole: role } = currentUser;
-        dispatch(setCurrentUser({ ...currentUser }));
-        dispatch(setIsAuth(true));
-        dispatch(setIsAdmin(role === roles.admin ? true : false));
-      })
-      .finally(() => setLoading(false));
+    if (localStorage.getItem('token')) {
+      check()
+        .then(currentUser => {
+          const { userRole: role } = currentUser;
+          dispatch(setCurrentUser({ ...currentUser }));
+          dispatch(setIsAuth(true));
+          dispatch(setIsAdmin(role === roles.admin ? true : false));
+        })
+        .finally(() => setLoading(false));
+    } else {
+      setLoading(false);
+    }
   }, [dispatch]);
 
   const token = localStorage.getItem('token');
@@ -54,39 +58,39 @@ function App() {
     }
   }, [dispatch, token]);
 
-  if (loading) {
-    return <Spinner />;
-  }
-
   return (
     <div className="App">
-      <Routes>
-        <Route exact path="/" element={<Navigate to="sign-up" />} />
-        <Route
-          path="/sign-in"
-          element={isAuth ? <Navigate to="/profiles" /> : <SignIn />}
-        />
-        <Route
-          path="/sign-up"
-          element={isAuth ? <Navigate to="/profiles" /> : <SignUp />}
-        />
-        {isAuth && (
-          <Route path="/" element={<AppContainer />}>
-            {isAdmin && (
-              <Fragment>
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/users" element={<Users />} />
-                <Route path="/users/:userId" element={<UserPage />} />
-              </Fragment>
-            )}
-            <Route path="/profiles" element={<ProfilesPage />} />
-          </Route>
-        )}
-        <Route
-          path="*"
-          element={isAuth ? <PageNotFound /> : <Navigate to="sign-in" />}
-        />
-      </Routes>
+      {loading ? (
+        <Spinner />
+      ) : (
+        <Routes>
+          <Route exact path="/" element={<Navigate to="sign-in" />} />
+          <Route
+            path="/sign-in"
+            element={isAuth ? <Navigate to="/profiles" /> : <SignIn />}
+          />
+          <Route
+            path="/sign-up"
+            element={isAuth ? <Navigate to="/profiles" /> : <SignUp />}
+          />
+          {isAuth && (
+            <Route path="/" element={<AppContainer />}>
+              {isAdmin && (
+                <Fragment>
+                  <Route path="/dashboard" element={<Dashboard />} />
+                  <Route path="/users" element={<Users />} />
+                  <Route path="/users/:userId" element={<UserPage />} />
+                </Fragment>
+              )}
+              <Route path="/profiles" element={<ProfilesPage />} />
+            </Route>
+          )}
+          <Route
+            path="*"
+            element={isAuth ? <PageNotFound /> : <Navigate to="sign-in" />}
+          />
+        </Routes>
+      )}
     </div>
   );
 }

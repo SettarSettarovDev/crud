@@ -70,3 +70,7 @@
 .sign-in-link {
   margin-top: 40px;
 }
+
+.error-message {
+  color: red;
+}

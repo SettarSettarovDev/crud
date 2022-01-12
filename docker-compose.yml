@@ -1,0 +1,14 @@
+version: '3.7'
+services:
+  client:
+    image: 'settar/crud-client'
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./client/src:/app/src
+  server:
+    image: 'settar/crud-server'
+    ports:
+      - '5000:5000'
+    volumes:
+      - ./server:/app

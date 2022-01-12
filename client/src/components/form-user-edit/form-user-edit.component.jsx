@@ -70,8 +70,11 @@ const UserEditForm = ({ userItem, userId, handleClose }) => {
     <div className="user-form-container">
       <form className="user-form" onSubmit={handleSubmit}>
         <div className="user-form__group">
-          <label className="user-form__label">user name:</label>
+          <label htmlFor="userNameUserEditForm" className="user-form__label">
+            user name:
+          </label>
           <input
+            id="userNameUserEditForm"
             className="user-form__input"
             type="text"
             name="userName"
@@ -81,8 +84,11 @@ const UserEditForm = ({ userItem, userId, handleClose }) => {
         </div>
 
         <div className="user-form__group">
-          <label className="user-form__label">email:</label>
+          <label htmlFor="emailUserEditForm" className="user-form__label">
+            email:
+          </label>
           <input
+            id="emailUserEditForm"
             className="user-form__input"
             type="text"
             name="userEmail"
@@ -94,8 +100,12 @@ const UserEditForm = ({ userItem, userId, handleClose }) => {
         <div className="user-form__group">
           <p className="user-form__label">role:</p>
           <div className="user-form__radio-group">
-            <label className="user-form__input user-form__input--role ">
+            <label
+              htmlFor="userRoleUserEditForm"
+              className="user-form__input user-form__input--role "
+            >
               <input
+                id="userRoleUserEditForm"
                 className="user-form__input-radio"
                 type="radio"
                 name="userRole"
@@ -105,8 +115,12 @@ const UserEditForm = ({ userItem, userId, handleClose }) => {
               />
               user
             </label>
-            <label className="user-form__input user-form__input--role ">
+            <label
+              htmlFor="adminRoleUserEditForm"
+              className="user-form__input user-form__input--role "
+            >
               <input
+                id="adminRoleUserEditForm"
                 className="user-form__input-radio"
                 type="radio"
                 name="userRole"
@@ -119,7 +133,11 @@ const UserEditForm = ({ userItem, userId, handleClose }) => {
           </div>
         </div>
         <div className="user-form__btn-group">
-          <button className="user-form__button" type="submit">
+          <button
+            data-testid="userEditFormSubmitBtn"
+            className="user-form__button"
+            type="submit"
+          >
             <CheckIcon />
           </button>
           <button className="user-form__button" onClick={handleClose}>

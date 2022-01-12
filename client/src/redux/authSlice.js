@@ -6,6 +6,7 @@ const authSlice = createSlice({
     currentUser: null,
     isAuth: false,
     isAdmin: false,
+    error: null,
   },
   reducers: {
     setCurrentUser(state, action) {
@@ -17,9 +18,13 @@ const authSlice = createSlice({
     setIsAdmin(state, action) {
       state.isAdmin = action.payload;
     },
+    setError(state, action) {
+      state.error = action.payload;
+    },
   },
 });
 
-export const { setCurrentUser, setIsAuth, setIsAdmin } = authSlice.actions;
+export const { setCurrentUser, setIsAuth, setIsAdmin, setError } =
+  authSlice.actions;
 
 export default authSlice.reducer;

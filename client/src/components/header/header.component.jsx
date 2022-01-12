@@ -56,7 +56,9 @@ const Header = () => {
               <DashboardIcon className="options-icon" />
             </Link>
             <Link to="/users" className="options-link">
-              <p className="options-text">Users</p>
+              <p className="options-text" data-testid="usersLink">
+                Users
+              </p>
               <UsersIcon className="options-icon" />
             </Link>
           </Fragment>

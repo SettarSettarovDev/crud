@@ -36,13 +36,14 @@ const CardItem = ({ item }) => {
 
   return (
     <>
-      <div className="card-item">
+      <div className="card-item" data-testid="cardId">
         <p className="card-item__name">{profileName}</p>
         <p>{profileGender}</p>
         <p>{profileBirthday}</p>
         <p>{profileCity}</p>
         <div className="buttons-container">
           <button
+            data-testid={`editedCardId-${profileId}`}
             className="btn-in-profile btn-in-profile--edit"
             onClick={() => {
               togglePopup();
@@ -52,6 +53,7 @@ const CardItem = ({ item }) => {
             <EditIcon />
           </button>
           <button
+            data-testid={`deletedCardId-${profileId}`}
             className="btn-in-profile btn-in-profile--delete"
             onClick={onDeleteHandle}
           >

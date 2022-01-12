@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { registration, roles } from '../../http/authApi';
 import './sign-up.styles.css';
+import validator from 'validator';
 import {
   setCurrentUser,
+  setError,
   setIsAdmin,
   setIsAuth,
 } from '../../redux/authSlice.js';
@@ -19,12 +21,26 @@ const SignUp = () => {
 
   const dispatch = useDispatch();
 
+  const { error } = useSelector(state => state.auth);
+
   const { userName, email, password, isAdmin } = userCredentials;
   const userRole = isAdmin ? roles.admin : roles.user;
 
   const handleSubmit = async e => {
     e.preventDefault();
     try {
+      if (!userCredentials.userName) {
+        return dispatch(setError('Username is empty'));
+      }
+
+      if (!validator.isEmail(userCredentials.email)) {
+        return dispatch(setError('The email you input is invalid'));
+      }
+
+      if (!userCredentials.password) {
+        return dispatch(setError('Password is empty'));
+      }
+
       const currentUser = await registration(
         userName,
         email,
@@ -35,8 +51,9 @@ const SignUp = () => {
       dispatch(setCurrentUser({ ...currentUser }));
       dispatch(setIsAuth(true));
       dispatch(setIsAdmin(role === roles.admin ? true : false));
+      currentUser && dispatch(setError(null));
     } catch (e) {
-      alert(e.response.data.message);
+      dispatch(setError(e.response.data.message));
     }
   };
 
@@ -59,8 +76,11 @@ const SignUp = () => {
       <div className="sign-up">
         <form className="sign-up-form" onSubmit={handleSubmit}>
           <div className="sign-up-form__group">
-            <label className="sign-up-form__label">Username</label>
+            <label htmlFor="username" className="sign-up-form__label">
+              Username
+            </label>
             <input
+              id="username"
               className="sign-up-form__input"
               type="text"
               name="userName"
@@ -69,9 +89,13 @@ const SignUp = () => {
               required
             />
           </div>
+
           <div className="sign-up-form__group">
-            <label className="sign-up-form__label">Email</label>
+            <label htmlFor="email" className="sign-up-form__label">
+              Email
+            </label>
             <input
+              id="email"
               className="sign-up-form__input"
               type="email"
               name="email"
@@ -80,9 +104,13 @@ const SignUp = () => {
               required
             />
           </div>
+
           <div className="sign-up-form__group">
-            <label className="sign-up-form__label">Password</label>
+            <label htmlFor="password" className="sign-up-form__label">
+              Password
+            </label>
             <input
+              id="password"
               className="sign-up-form__input"
               type="password"
               name="password"
@@ -91,9 +119,11 @@ const SignUp = () => {
               required
             />
           </div>
+
           <div className="sign-up-form__group">
-            <label className="sign-up-form__label">
+            <label htmlFor="isAdmin" className="sign-up-form__label">
               <input
+                id="isAdmin"
                 className="sign-up-form__input--checkbox"
                 type="checkbox"
                 name="isAdmin"
@@ -102,8 +132,15 @@ const SignUp = () => {
               is admin
             </label>
           </div>
+
+          {error && <div className="error-message">{error}</div>}
+
           <div>
-            <button className="sign-up-form__button" type="submit">
+            <button
+              className="sign-up-form__button"
+              type="submit"
+              onClick={handleSubmit}
+            >
               Sign up
             </button>
           </div>
