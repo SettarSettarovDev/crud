@@ -1,0 +1,21 @@
+{
+  "name": "crud",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "build": "cd client && npm run build",
+    "heroku-postbuild": "cd client && npm install && cd server && npm install --only=dev --no-shrinkwrap && npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SettarSettarovDev/crud.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SettarSettarovDev/crud/issues"
+  },
+  "homepage": "https://github.com/SettarSettarovDev/crud#readme"
+}
