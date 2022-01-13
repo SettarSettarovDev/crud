@@ -26,6 +26,7 @@
     "test-cover": "react-scripts test --coverage --watchAll",
     "eject": "react-scripts eject"
   },
+  "proxy": "http://localhost:5000",
   "eslintConfig": {
     "extends": [
       "react-app",

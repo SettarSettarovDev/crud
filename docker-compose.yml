@@ -1,14 +1,19 @@
-version: '3.7'
+version: '3'
 services:
-  client:
-    image: 'settar/crud-client'
-    ports:
-      - '3000:3000'
-    volumes:
-      - ./client/src:/app/src
   server:
-    image: 'settar/crud-server'
+    env_file: './server/.env'
+    build:
+      context: ./server
+      dockerfile: ./Dockerfile
+    image: 'settar/crud-server-image'
     ports:
       - '5000:5000'
-    volumes:
-      - ./server:/app
+  client:
+    build:
+      context: ./client
+      dockerfile: ./Dockerfile
+    image: 'settar/crud-client-image'
+    ports:
+      - '3000:3000'
+    links:
+      - 'server:localhost'
