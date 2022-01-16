@@ -1,14 +1,14 @@
 const ApiError = require('../error/ApiError');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
-const { User, Profile } = require('../models/models');
+const { User } = require('../models/models');
 
 const genereateJwt = (userId, userEmail, userRole, userName) => {
   return jwt.sign(
     { userId, userEmail, userRole, userName },
     process.env.SECRET_KEY,
     {
-      expiresIn: '24h',
+      expiresIn: '31 days',
     }
   );
 };
@@ -86,15 +86,6 @@ const UserController = {
     try {
       const users = await User.findAll();
       return res.json(users);
-    } catch (e) {
-      next(ApiError.badRequest(e.message));
-    }
-  },
-  async getOneUser(req, res) {
-    try {
-      const { userId } = req.params;
-      const user = await User.findOne({ where: { userId } });
-      return res.json(user);
     } catch (e) {
       next(ApiError.badRequest(e.message));
     }

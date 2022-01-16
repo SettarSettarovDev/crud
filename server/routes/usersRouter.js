@@ -5,7 +5,6 @@ const {
   login,
   check,
   getAllUsers,
-  getOneUser,
   updateUser,
   deleteUser,
 } = require('../controllers/userController');
@@ -16,7 +15,6 @@ router.post('/registration', registration);
 router.post('/login', login);
 router.get('/auth', authMiddleware, check);
 router.get('/', checkRole('ADMIN'), getAllUsers);
-router.get('/:userId', checkRole('ADMIN'), getOneUser);
 router.put('/:userId', checkRole('ADMIN'), updateUser);
 router.delete('/:userId', checkRole('ADMIN'), deleteUser);
 

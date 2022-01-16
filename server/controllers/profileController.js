@@ -72,16 +72,6 @@ const ProfileController = {
       next(ApiError.badRequest(e.message));
     }
   },
-
-  async getOneProfile(req, res) {
-    try {
-      const { profileId } = req.params;
-      const profile = await Profile.findOne({ where: { profileId } });
-      return res.json(profile);
-    } catch (e) {
-      next(ApiError.badRequest(e.message));
-    }
-  },
 };
 
 module.exports = ProfileController;
